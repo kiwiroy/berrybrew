@@ -110,6 +110,21 @@ namespace BerryBrew {
             }
         }
 
+        public void Proc ()
+        {
+           
+            Process compiler = new Process();
+            compiler.StartInfo.FileName = "c:/repos/berrybrew/dev/refreshenv.bat";
+            //compiler.StartInfo.Arguments = "";
+            compiler.StartInfo.UseShellExecute = false;
+            compiler.StartInfo.RedirectStandardOutput = true;
+            compiler.Start();
+
+            Console.WriteLine(compiler.StandardOutput.ReadToEnd());
+
+            compiler.WaitForExit();
+        }
+        
         public void List(){
             StrawberryPerl currentPerl = PerlInUse();
 
