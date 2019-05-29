@@ -151,15 +151,11 @@ Switch to a different version (permanently):
 
     > berrybrew switch 5.28.0_64
 
-    Switched to 5.28.0_64, start a new terminal to use it.
-
-Start a new cmd.exe to use the new version:
+    Switched to 5.28.0_64
 
     > perl -v
 
     This is perl 5, version 28, subversion 0 (v5.28.0) built for MSWin32-x64-multi-thread
-
-    ...       
 
 Clone an installed instance (very useful for setting up a main instance,
 and cloning it into an instance named "template")
@@ -279,8 +275,7 @@ export the module list for, and:
     > berrybrew modules export
 
 Then, `berrybrew switch` to the Perl instance you want to import the
-exported modules into. You'll need to close and reopen a new command
-window, as always.
+exported modules into. 
 
 Then, the following command will display a list of all exported module
 files from any/all Perl instances you've done an export from:

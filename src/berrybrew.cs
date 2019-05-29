@@ -1407,7 +1407,7 @@ namespace BerryBrew {
                 SwitchProcess();
                 
                 Console.WriteLine(
-                        "\nSwitched to Perl version {0}...\n\n", 
+                        "\nSwitched to Perl version {0}...\n", 
                         switchToVersion
                 );
             }
@@ -1428,11 +1428,11 @@ namespace BerryBrew {
 
             for (int i = 1; i < procList.Length; i++)
             {
-                PerformanceCounter myParentMultiProcID =
+                PerformanceCounter myParentMultiProcId =
                     new PerformanceCounter("Process", "ID Process",
                         procName + "#" + i);
 
-                parentPID = myParentMultiProcID.NextValue();
+                parentPID = myParentMultiProcId.NextValue();
             }
 
             string cwd = Directory.GetCurrentDirectory();
