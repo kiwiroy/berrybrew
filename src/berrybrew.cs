@@ -110,19 +110,39 @@ namespace BerryBrew {
             }
         }
 
-        public void Proc ()
+        public void SwitchProcess ()
         {
-           
-            Process compiler = new Process();
-            compiler.StartInfo.FileName = "c:/repos/berrybrew/dev/refreshenv.bat";
-            //compiler.StartInfo.Arguments = "";
-            compiler.StartInfo.UseShellExecute = false;
-            compiler.StartInfo.RedirectStandardOutput = true;
-            compiler.Start();
+            string procName = Process.GetCurrentProcess().ProcessName;
 
-            Console.WriteLine(compiler.StandardOutput.ReadToEnd());
+            Process[] procList = Process.GetProcessesByName(procName);
+            PerformanceCounter myParentID = new PerformanceCounter("Process", "Creating Process ID", procName);
+            float parentPID = myParentID.NextValue();
 
-            compiler.WaitForExit();
+            // Console.WriteLine("Parent for {0}: PID: {1}  Name: {2}", procName, parentPID , Process.GetProcessById((int)parentPID).ProcessName);
+
+            for (int i = 1; i < procList.Length; i++)
+            {
+                PerformanceCounter myParentMultiProcID =
+                    new PerformanceCounter("Process", "ID Process",
+                        procName + "#" + i);
+
+                parentPID = myParentMultiProcID.NextValue();
+            }
+
+            string cwd = Directory.GetCurrentDirectory();
+            
+            Process replacement = new Process();
+            replacement.StartInfo.FileName = "cmd.exe";
+            replacement.StartInfo.WorkingDirectory = cwd;
+            replacement.StartInfo.EnvironmentVariables.Remove("PATH");
+            replacement.StartInfo.EnvironmentVariables.Add("PATH", PathGet());
+            replacement.StartInfo.UseShellExecute = false;
+            replacement.StartInfo.RedirectStandardOutput = false;
+            replacement.Start();
+
+            // kill the original parent proc's cmd window
+            
+            Process.GetProcessById((int) parentPID).Kill();
         }
         
         public void List(){
@@ -1419,6 +1439,8 @@ namespace BerryBrew {
                 PathRemovePerl();
                 PathAddPerl(perl);
 
+                SwitchProcess();
+                
                 Console.WriteLine(
                         "Switched to {0}, start a new terminal to use it.", 
                         switchToVersion
