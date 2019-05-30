@@ -7,7 +7,10 @@ Revision history for berrybrew
         - added new testing environment variables (set in t\setup_test_env.bat)
           which set up some test-specific flags to shim the system where
           necessary
-                  
+        - reworked unit test platform; the "dev build" and "test" infrastructures
+          are now completely separate. This eliminates issues where in some
+          cases, the two environments overlapped each other
+                            
 1.23    2019-05-26
         - fixed issue in README where some external doc links were pointing to
           the wrong branch (fixes #147)
