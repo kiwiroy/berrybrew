@@ -1381,9 +1381,15 @@ namespace BerryBrew {
 
                 PathRemovePerl();
                 PathAddPerl(perl);
-
-                SwitchProcess();
                 
+                Int32 bbSwitchTest = Convert.ToInt32(
+                    Environment.GetEnvironmentVariable("BB_SWITCH_TEST")
+                );
+
+                if (Convert.ToInt32(bbSwitchTest) != 1) {
+                    SwitchProcess();
+                }
+
                 Console.WriteLine(
                         "\nSwitched to Perl version {0}...\n", 
                         switchToVersion
@@ -1433,7 +1439,6 @@ namespace BerryBrew {
             replacement.Start();
 
             // kill the original parent proc's cmd window
-            
             Process.GetProcessById((int) parentPid).Kill();
         }
         public void Unconfig(){
