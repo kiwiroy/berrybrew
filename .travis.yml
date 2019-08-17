@@ -1,0 +1,28 @@
+language: c
+
+os: windows
+
+env:
+  global:
+    - TRAVIS_PERL_VERSION="5.30.0_64"
+    - MSBUILD_PATH="c:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin"
+
+script:
+  - |
+    export PATH="$MSBUILD_PATH:$MSBUILD_PATH\Roslyn:$PATH"
+    mkdir -p build/data /c/berrybrew/build /c/berrybrew/temp
+    cp dev/data/*.json build/data/
+    perl -i.bak -ne 's/berrybrew(?!\\\\build)/berrybrew\\\\build/; print' build/data/config.json
+    csc.exe -lib:bin -t:library -r:Newtonsoft.Json.dll,ICSharpCode.SharpZipLib.dll -out:build/bbapi.dll src/berrybrew.cs
+    csc.exe -lib:build -r:bbapi.dll -win32icon:inc/berrybrew.ico -out:build/berrybrew.exe src/bbconsole.cs
+    cp bin/ICSharpCode.SharpZipLib.dll bin/Newtonsoft.Json.dll build/
+  - echo Y | ./build/berrybrew.exe config
+  - ": but it does not ;"
+  - export PATH="./build:$PATH"
+  - berrybrew available
+  - berrybrew install "$TRAVIS_PERL_VERSION"
+  - which berrybrew
+  - berrybrew switch "$TRAVIS_PERL_VERSION"
+  - which perl
+    
+  
